@@ -35,12 +35,12 @@
 
       # optionally set driver version for specific gpu
       package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      version = "555.58.02";
-      sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-      sha256_aarch64 = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-      openSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-      settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-      persistencedSha256 = lib.fakeSha256;
+        version = "555.58.02";
+        sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
+        sha256_aarch64 = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
+        openSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
+        settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
+        persistencedSha256 = lib.fakeSha256;
       };
     };
   };
@@ -103,19 +103,20 @@
     ];
   };
 
-  programs.zsh.enable = true;
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-  };
-  programs.firefox.enable = true;
-  programs.neovim.enable = true;
-  programs.neovim.defaultEditor = true;
-  programs.steam = {
-    enable = true;
-    remotePlay.openFirewall = true;
-    dedicatedServer.openFirewall = true;
-    localNetworkGameTransfers.openFirewall = true;
+  programs = {
+    zsh.enable = true;
+    hyprland = {
+      enable = true;
+      xwayland = true;
+    };
+    waybar.enable = true;
+    firefox.enable = true;
+    steam = {
+      enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
+      localNetworkGameTransfers.openFirewall = true;
+    };
   };
 
   home-manager = {
@@ -133,19 +134,23 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   zsh
+  helix
   git
   gh
+  tmux
   go
   rustup
   jdk17
   kitty
   rofi-wayland
+  dunst
   swww
   pavucontrol
   blueman
   spotifyd
   spotify-player
   gcc
+  cmake 
   ripgrep
   fzf
   eza
