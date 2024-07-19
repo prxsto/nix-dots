@@ -18,24 +18,24 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  hardware.graphics = {
-    enable = true;
-  };
-
   # Load nvidia driver for xorg/wayland
   services.xserver.videoDrivers = ["nvidia"];
   boot.kernelParams = ["nvidia-drm.fbdev=1"];
 
-  hardware.nvidia = {
-    modesetting.enable = true; # required
-    powerManagement.enable = false;
-    # experimental, turns off gpu when not in use
-    powerManagement.finegrained = false; 
-    open = false;
-    nvidiaSettings = false;
+  hardware = {
+    graphics.enable = true;
+    enableRedistributableFirmware = true;    
+    nvidia = {
+      modesetting.enable = true; # required
+      powerManagement.enable = false;
+      # experimental, turns off gpu when not in use
+      powerManagement.finegrained = false; 
+      open = false;
+      nvidiaSettings = true;
 
-    # optionally set driver version for specific gpu
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+      # optionally set driver version for specific gpu
+      package = config.boot.kernelPackages.nvidiaPackages.production;
+    };
   };
 
   # Set your time zone.
@@ -162,6 +162,14 @@
   fonts.packages = with pkgs; [
   fira-code-nerdfont
   ];
+
+  environment.etc."current-system-packages".text =
+  let
+    packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
+    sortedUnique = builtins.sort builtins.lessThan (pkgs.lib.lists.unique packages);
+    formatted = builtins.concatStringsSep "\n" sortedUnique;
+  in
+    formatted;
 
   # don't touch :3
   system.stateVersion = "24.05";
