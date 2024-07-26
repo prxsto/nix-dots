@@ -1,11 +1,12 @@
-{ pkgs, lib, config, ...} {
-  
-  options = {
-    hyprland.enable = 
-      lib.mkEnableOption "enables hyprland";
-  };
+{ pkgs, lib, config, ...}: 
 
-  config = lib.mkIf config.hyprland.enable { 
+with lib;
+{
+  options.modules.hyprland = {
+    enable = mkOption { type = types.bool; default = false; };
+  };
+  
+  config = mkIf config.modules.hyprland.enable { 
     wayland.windowManager.hyprland = {
       # allow home-manager to configure hyprland
       enable = true;
@@ -64,7 +65,7 @@
         animations = {
           enabled = true;
           bezier = "myBezier, 0.05, 0.9, 0.1, 1.05";
-          bezier = "overshot, 0.13, 0.99, 0.29, 1.1";
+          # bezier = "overshot, 0.13, 0.99, 0.29, 1.1";
 
           animation = [
             "windows, 1, 7, myBezier"
@@ -110,8 +111,8 @@
               "$mainMod, tab, changegroupactive"
 
               # screenshot
-              "$mainMod, S, exec, grim ~/Pictures/screenshots/$(date '+%Y-%m-%d-%H:%M:%S').png"
-              "$mainMod SHIFT, S, exec, grim -g "$(slurp)" ~/Pictures/screenshots/$(date '+%Y-%m-%d-%H:%M:%S').png"
+              # "$mainMod, S, exec, grim ~/Pictures/screenshots/$(date '+%Y-%m-%d-%H:%M:%S').png"
+              # "$mainMod SHIFT, S, exec, grim -g "$(slurp)" ~/Pictures/screenshots/$(date '+%Y-%m-%d-%H:%M:%S').png"
 
           
               ", Print, exec, volumectl -m toggle-mute"
@@ -164,7 +165,7 @@
               ", XF86AudioLowerVolume, exec, volumectl -u down"
             ];
 
-          bindle = 
+          bindl = 
             [
               ", XF86AudioMute, exec, volumectl toggle-mute"
             ];
@@ -182,6 +183,17 @@
           ];
         };
       };
+      home.packages = with pkgs; [
+        grim
+        slurp
+        wl-clipboard
+
+        swww
+
+        networkmanagerapplet
+
+        rofi-wayland
+      ];
     };
   };
 }

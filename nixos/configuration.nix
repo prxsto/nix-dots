@@ -32,7 +32,8 @@
     config = {
       allowUnfree = true;
     };
-
+  };
+  
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
@@ -57,7 +58,6 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "yggdrasil";
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.networkmanager.enable = true;
 
@@ -166,7 +166,6 @@
   zsh
   helix
   gh
-  zellij
   nodejs_22
   bun
   go

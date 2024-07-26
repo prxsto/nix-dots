@@ -13,16 +13,20 @@ in
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
     # outputs.homeManagerModules.example
-    outputs.homeManagerModules.hyprland
 
     # Or modules exported from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
+    ../modules/home-manager/hyprland.nix
+    ../modules/home-manager/helix.nix
+    ../modules/home-manager/zellij.nix
   ];
 
   hyprland.enable = true;
+  helix.enable = true;
+  zellij.enable = true;
 
   nixpkgs = {
     # You can add overlays here
@@ -62,7 +66,6 @@ in
     ];
   };
 
-  # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
   programs.git.enable = true;
 
@@ -70,4 +73,5 @@ in
   systemd.user.startServices = "sd-switch";
 
   home.stateVersion = "24.05"; # no touchy ;)
+
 }
