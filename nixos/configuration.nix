@@ -1,17 +1,56 @@
 { 
-  inputs, 
+  inputs,
   outputs,
-  lib, 
-  config,
-  pkgs, 
-  ...
+  lib,
+  config, 
+  pkgs,
+  ... 
 }: {
-  imports =
-    [ 
+  # import other nixos modules here
+  imports = [ 
       ./hardware-configuration.nix
-      ./modules/hyprland.nix
-      inputs.home-manager.nixosModules.default
+  ];
+
+  nixpkgs = {
+    overlays = [
+      # Add overlays your own flake exports (from overlays and pkgs dir):
+      outputs.overlays.additions
+      outputs.overlays.modifications
+      outputs.overlays.unstable-packages
+
+      # You can also add overlays exported from other flakes:
+      # neovim-nightly-overlay.overlays.default
+
+      # Or define it inline, for example:
+      # (final: prev: {
+      #   hi = final.hello.overrideAttrs (oldAttrs: {
+      #     patches = [ ./change-hello-to-hi.patch ];
+      #   });
+      # })
     ];
+    # Configure your nixpkgs instance
+    config = {
+      allowUnfree = true;
+    };
+
+  nix = let
+    flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+  in {
+    settings = {
+      # Enable flakes and new 'nix' command
+      experimental-features = "nix-command flakes";
+      # Opinionated: disable global registry
+      flake-registry = "";
+      # Workaround for https://github.com/NixOS/nix/issues/9574
+      nix-path = config.nix.nixPath;
+    };
+    # Opinionated: disable channels
+    channel.enable = false;
+
+    # Opinionated: make flake registry and nix path match flake inputs
+    registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
+    nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
+  };
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -21,8 +60,6 @@
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   networking.networkmanager.enable = true;
-
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Load nvidia driver for xorg/wayland
   services.xserver.videoDrivers = ["nvidia"];
@@ -125,23 +162,9 @@
     };
   };
 
-  home-manager = {
-    # also pass inputs to home-manager modules
-    extraSpecialArgs = { inherit inputs; };
-    users = {
-        "prxsto" = import ./home.nix;
-      };
-  };
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
   zsh
   helix
-  git
   gh
   zellij
   nodejs_22
@@ -155,8 +178,6 @@
   swww
   pavucontrol
   blueman
-  spotifyd
-  spotify-player
   killall
   gcc
   cmake 
@@ -195,5 +216,4 @@
 
   # don't touch :3
   system.stateVersion = "24.05";
-
 }
