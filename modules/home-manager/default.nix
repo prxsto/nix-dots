@@ -3,7 +3,7 @@
 {
   # List your module files here
   # my-module = import ./my-module.nix;
-  # hyprland = import ./hyprland.nix;
-  # helix = import ./helix.nix;
-  # zellij = import ./zellij.nix;
+  hyprland = import ./hyprland.nix;
+  helix = import ./helix.nix;
+  zellij = import ./zellij.nix;
 }

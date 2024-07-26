@@ -7,10 +7,6 @@ with lib;
   };
   
   config = mkIf config.modules.hyprland.enable { 
-    wayland.windowManager.hyprland = {
-      # allow home-manager to configure hyprland
-      enable = true;
-
       settings = {
 
         general = {
@@ -81,7 +77,7 @@ with lib;
           };
 
           master = {
-            new_status = master;
+            new_status = "master";
           };
 
           cursor = {
@@ -183,6 +179,7 @@ with lib;
           ];
         };
       };
+
       home.packages = with pkgs; [
         grim
         slurp
@@ -195,5 +192,4 @@ with lib;
         rofi-wayland
       ];
     };
-  };
-}
+  }
