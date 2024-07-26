@@ -1,9 +1,15 @@
-{ config, lib, pkgs, inputs, ... }:
-
-{
+{ 
+  inputs, 
+  outputs,
+  lib, 
+  config,
+  pkgs, 
+  ...
+}: {
   imports =
     [ 
       ./hardware-configuration.nix
+      ./modules/hyprland.nix
       inputs.home-manager.nixosModules.default
     ];
 
@@ -88,8 +94,7 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
+    jack.enable = true;
   };
   services.flatpak.enable = true;
 
@@ -107,7 +112,8 @@
     zsh.enable = true;
     hyprland = {
       enable = true;
-      xwayland = true;
+      # package = inputs.hyprland.packages."${pkgs.system}".hyprland;
+      xwayland.enable = true;
     };
     waybar.enable = true;
     firefox.enable = true;
@@ -137,7 +143,9 @@
   helix
   git
   gh
-  tmux
+  zellij
+  nodejs_22
+  bun
   go
   rustup
   jdk17
@@ -149,6 +157,7 @@
   blueman
   spotifyd
   spotify-player
+  killall
   gcc
   cmake 
   ripgrep
@@ -160,6 +169,7 @@
   grim
   slurp
   fastfetch
+  cava
   btop
   cbonsai
   mesa
@@ -174,6 +184,7 @@
   fira-code-nerdfont
   ];
 
+  # create /etc/current-system-packages.txt with a list of unique packages installed
   environment.etc."current-system-packages".text =
   let
     packages = builtins.map (p: "${p.name}") config.environment.systemPackages;
