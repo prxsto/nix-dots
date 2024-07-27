@@ -12,17 +12,14 @@ in
 {
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
-    outputs.homeManagerModules.helix
-    outputs.homeManagerModules.hyprland
-    outputs.homeManagerModules.zellij
-
+    outputs.homeManagerModules.default
 
     # Or modules exported from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
-  ];
+  ] ++ (builtins.attrValues outputs.homeManagerModules);
 
   modules.hyprland.enable = true;
   modules.helix.enable = true;
