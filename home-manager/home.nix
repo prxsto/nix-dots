@@ -12,18 +12,18 @@ in
 {
   imports = [
     # If you want to use modules your own flake exports (from modules/home-manager):
-    outputs.homeManagerModules.default
+    # outputs.homeManagerModules.default
 
     # Or modules exported from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModules.default
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
-  ] ++ (builtins.attrValues outputs.homeManagerModules);
+  ]; # ++ (builtins.attrValues outputs.homeManagerModules);
 
-  modules.hyprland.enable = true;
-  modules.helix.enable = true;
-  modules.zellij.enable = true;
+  # modules.hyprland.enable = true;
+  # modules.helix.enable = true;
+  # modules.zellij.enable = true;
 
   nixpkgs = {
     # You can add overlays here
@@ -59,12 +59,11 @@ in
     };
 
     packages = with pkgs; [
-
+      discord
     ];
   };
 
   programs.home-manager.enable = true;
-  programs.git.enable = true;
 
   # reload system units when changing configs
   systemd.user.startServices = "sd-switch";

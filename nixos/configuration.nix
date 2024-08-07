@@ -123,7 +123,10 @@
 
   services.printing.enable = true; # enable document printing
 
+  hardware.keyboard.qmk.enable = true;
+
   # Enable sound with pipewire.
+  hardware.bluetooth.enable = true;
   hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
@@ -133,6 +136,7 @@
     pulse.enable = true;
     jack.enable = true;
   };
+  xdg.portal.enable = true;
   services.flatpak.enable = true;
 
   users.defaultUserShell = pkgs.zsh;
@@ -140,7 +144,7 @@
   users.users.prxsto = {
     isNormalUser = true;
     description = "prxsto";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "audio"];
     packages = with pkgs; [
     ];
   };
@@ -165,6 +169,7 @@
   environment.systemPackages = with pkgs; [
   zsh
   helix
+  git
   gh
   nodejs_22
   bun
@@ -198,7 +203,9 @@
   glxinfo
   lutris
   wine
+  via
   ];
+  services.udev.packages = [ pkgs.via ];
 
   fonts.packages = with pkgs; [
   fira-code-nerdfont
