@@ -177,6 +177,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+  nil
   helix
   git
   gh
@@ -217,7 +218,7 @@
   services.udev.packages = [ pkgs.via ];
 
   fonts.packages = with pkgs; [
-  fira-code-nerdfont
+    (nerdfonts.override { fonts = [ "FiraCode" "ZedMono" "Iosevka"]})
   ];
 
   # create /etc/current-system-packages.txt with a list of unique packages installed
