@@ -59,6 +59,7 @@ in
     };
 
     packages = with pkgs; [
+      helix
       discord
     ];
   };
