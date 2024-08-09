@@ -160,14 +160,16 @@
 
   programs = {
     fish.enable = true;
-    zsh.enable = true;
     hyprland = {
       enable = true;
       package = inputs.hyprland.packages."${pkgs.system}".hyprland;
       xwayland.enable = true;
     };
     waybar.enable = true;
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+      package = pkgs.firefox-devedition;
+      };
     steam = {
       enable = true;
       remotePlay.openFirewall = true;
@@ -177,8 +179,11 @@
   };
 
   environment.systemPackages = with pkgs; [
+  fish
+  fishPlugins.tide
   nil
   helix
+  tmux
   git
   gh
   nodejs_22
@@ -218,7 +223,7 @@
   services.udev.packages = [ pkgs.via ];
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "FiraCode" "ZedMono" "Iosevka"]})
+    (nerdfonts.override { fonts = [ "FiraCode" "ZedMono" "Iosevka"]; })
   ];
 
   # create /etc/current-system-packages.txt with a list of unique packages installed
